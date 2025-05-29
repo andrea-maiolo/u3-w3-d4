@@ -7,6 +7,8 @@ import { getJobsAction } from "../redux/actions";
 const MainSearch = () => {
   const [query, setQuery] = useState("");
   const jobs = useSelector((state) => state.jobList.content);
+  const errorMessage = useSelector((state) => state.errorState.errorMessage);
+  const errorState = useSelector((state) => state.errorState.hasError);
   const dispatch = useDispatch();
 
   const baseEndpoint = "https://strive-benchmark.herokuapp.com/api/jobs?search=";
@@ -32,9 +34,15 @@ const MainSearch = () => {
           </Form>
         </Col>
         <Col xs={10} className="mx-auto mb-5">
-          {jobs.map((jobData) => (
-            <Job key={jobData._id} data={jobData} />
-          ))}
+          {errorState ? (
+            <h1>{errorMessage}</h1>
+          ) : (
+            <>
+              {jobs.map((jobData) => (
+                <Job key={jobData._id} data={jobData} />
+              ))}
+            </>
+          )}
         </Col>
       </Row>
     </Container>
