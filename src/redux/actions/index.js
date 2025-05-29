@@ -5,23 +5,22 @@ export const SET_JOB_LIST = "SET_JOB_LIST";
 export const setToFavAction = (job) => ({ type: SET_FAV, payload: job });
 export const deleteFromListAction = (i) => ({ type: DELETE_FROM_LIST, payload: i });
 
-// grazie a redux-thunk, già integrato come middleware dal nostro configureStrore() di @reduxjs/toolkit,
-// abbiamo la possibilità, da subito, di poter creare degli action creator che invece di ritornare subito un oggetto,
-// possano fare operazioni intermedie, ANCHE ASINCRONE!!!
+export const checkPayloadFav = (payload) => {
+  return async (dispatch, getState) => {
+    let currentFavList = getState().favorite.content;
+    // console.log(getState().jobList.content);
+    // console.log(currentFavList);
+    if (currentFavList.some((ele) => ele._id === payload._id)) {
+      // setErrorFav("seems already saved");
+      return;
+    } else {
+      dispatch(setToFavAction(payload));
+    }
+  };
+};
 
 export const getJobsAction = (endpoint) => {
-  // questo action creator ritorna una funzione invece di un oggetto di action
   return async (dispatch, getState) => {
-    // qui dentro possiamo gestire logica (condizionale e non) anche asincrona
-
-    // possiamo leggere lo stato globale nel momento in cui si avvia questo action creator, ed eventualmente
-    // reagire condizionalmente a dei valori presenti nello stato in quel momento
-    const globalState = getState(); // la chiamata di getState mi torna l'intero stato globale che posso leggere e trattare come oggetto
-    console.log("global State", globalState);
-
-    // essendo noi inseriti in dinamiche redux possiamo lanciare più dispatch da un singolo action creator
-    // stiamo gestendo stati di caricamento ed errori che poi potremo leggere da qualunque punto dell'applicazione
-    // per poter far comparire spinner o alert di errore dove vogliamo (anche più di uno per lo stesso dato di stato)
     // dispatch({ type: SET_JOB_LIST }); per il loading
     try {
       let response = await fetch(endpoint);

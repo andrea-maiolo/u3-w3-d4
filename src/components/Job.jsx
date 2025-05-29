@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Row, Col, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { setToFavAction } from "../redux/actions";
+import { checkPayloadFav, setToFavAction } from "../redux/actions";
 
 const Job = ({ data }) => {
   const dispatch = useDispatch();
@@ -31,7 +31,8 @@ const Job = ({ data }) => {
         <Button
           className="ms-2 btn-success"
           onClick={() => {
-            checkPayload(data);
+            dispatch(checkPayloadFav(data));
+            // checkPayload(data);
             // dispatch(setToFavAction(data));
           }}
         >
