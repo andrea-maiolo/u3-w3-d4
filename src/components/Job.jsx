@@ -2,10 +2,11 @@ import { useState } from "react";
 import { Row, Col, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { setToFavAction } from "../redux/actions";
 
 const Job = ({ data }) => {
   const dispatch = useDispatch();
-  const currentFavList = useSelector((state) => state.favorites.content);
+  const currentFavList = useSelector((state) => state.favorite.content);
   const [errorFav, setErrorFav] = useState(null);
 
   const checkPayload = (payload) => {
@@ -14,7 +15,7 @@ const Job = ({ data }) => {
       setErrorFav("seems already saved");
       return;
     } else {
-      dispatch({ type: "SET_FAV", payload: payload });
+      dispatch(setToFavAction(payload));
     }
   };
 
@@ -31,6 +32,7 @@ const Job = ({ data }) => {
           className="ms-2 btn-success"
           onClick={() => {
             checkPayload(data);
+            // dispatch(setToFavAction(data));
           }}
         >
           Add to favourites
